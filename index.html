@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vulkaan Splitsen Spel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fceabb;
+      background: linear-gradient(to bottom, #f8b500, #fceabb);
+    }
+    #game {
+      margin-top: 20px;
+    }
+    .rotsen {
+      font-size: 2em;
+      margin: 10px;
+    }
+    .antwoordknoppen button {
+      font-size: 2em;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-size: 1.5em;
+    }
+    .vulkaan-container {
+      position: relative;
+      height: 100px;
+    }
+    .vulkaan {
+      font-size: 4em;
+    }
+    .rots {
+      display: inline-block;
+      margin: 0 3px;
+    }
+    .aantal-highlight {
+      font-weight: bold;
+      color: #c0392b;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌋 Vulkaan Splitsen!</h1>
+  <div class="vulkaan-container">
+    <div class="vulkaan">🌋</div>
+  </div>
+  <div id="game">
+    <p id="vraag"></p>
+    <div class="rotsen" id="zichtbareRotsen"></div>
+    <div class="antwoordknoppen" id="knoppen"></div>
+    <div id="feedback"></div>
+    <button onclick="nieuweVraag()">Volgende</button>
+  </div>
+
+  <script>
+    let totaal = 0;
+    let zichtbaar = 0;
+
+    function nieuweVraag() {
+      document.getElementById('feedback').textContent = '';
+      totaal = Math.floor(Math.random() * 5) + 2; // 2 t/m 6
+      zichtbaar = Math.floor(Math.random() * (totaal - 1)) + 1;
+
+      const vraagElement = document.getElementById('vraag');
+      vraagElement.innerHTML = `Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan. Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?`;
+
+      toonZichtbareRotsen(zichtbaar);
+      maakKnoppen(totaal - zichtbaar);
+    }
+
+    function toonZichtbareRotsen(aantal) {
+      const container = document.getElementById('zichtbareRotsen');
+      container.innerHTML = '';
+      for (let i = 0; i < aantal; i++) {
+        const steen = document.createElement('span');
+        steen.className = 'rots';
+        steen.textContent = '🪨';
+        container.appendChild(steen);
+      }
+    }
+
+    function maakKnoppen(juisteAntwoord) {
+      let container = document.getElementById('knoppen');
+      container.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        let knop = document.createElement('button');
+        knop.textContent = i;
+        knop.onclick = function () {
+          controleerAntwoord(i, juisteAntwoord);
+        };
+        container.appendChild(knop);
+      }
+    }
+
+    function controleerAntwoord(keuze, juist) {
+      const feedback = document.getElementById('feedback');
+      if (keuze === juist) {
+        feedback.textContent = `Goed zo! ${zichtbaar} + ${juist} = ${totaal}`;
+        feedback.style.color = 'green';
+      } else {
+        feedback.textContent = 'Oeps, probeer het nog eens!';
+        feedback.style.color = 'red';
+      }
+    }
+
+    nieuweVraag();
+  </script>
+</body>
+</html>
