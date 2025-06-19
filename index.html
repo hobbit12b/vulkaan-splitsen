@@ -1,116 +1,245 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vulkaan Splitsen Spel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vulkaan Splitsen - Keuze</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       font-family: sans-serif;
       text-align: center;
-      background: #fceabb;
       background: linear-gradient(to bottom, #f8b500, #fceabb);
+      padding: 2vw;
+      margin: 0;
     }
-    #game {
-      margin-top: 20px;
+
+    h1 {
+      font-size: 6vw;
+      margin-bottom: 2vw;
     }
-    .rotsen {
-      font-size: 2em;
-      margin: 10px;
+
+    .keuze-scherm, #game {
+      max-width: 800px;
+      margin: 0 auto;
     }
-    .antwoordknoppen button {
-      font-size: 2em;
-      margin: 10px;
-      padding: 10px 20px;
+
+    .keuzeknop {
+      font-size: 5vw;
+      padding: 2vw 4vw;
+      margin: 2vw;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff5cc;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
       cursor: pointer;
     }
-    #feedback {
-      margin-top: 20px;
-      font-size: 1.5em;
+
+    .keuzeknop:hover {
+      background-color: #ffe680;
     }
-    .vulkaan-container {
-      position: relative;
-      height: 100px;
-    }
+
     .vulkaan {
-      font-size: 4em;
+      font-size: 12vw;
+      margin-bottom: 2vw;
     }
+
+    .splitstabel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2vw;
+      margin: 3vw 0;
+    }
+
+    .splithelft {
+      flex: 1;
+      background-color: #fffbe6;
+      padding: 2vw;
+      border-radius: 10px;
+      min-height: 10vw;
+      min-width: 35%;
+    }
+
+    .scheiding {
+      font-size: 6vw;
+      color: #c0392b;
+      font-weight: bold;
+    }
+
     .rots {
+      font-size: 8vw;
+      margin: 0.5vw;
       display: inline-block;
-      margin: 0 3px;
     }
+
+    .rots.fout {
+      opacity: 0.5;
+      filter: hue-rotate(320deg) saturate(2);
+    }
+
+    .antwoordknoppen {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2vw;
+      margin: 2vw 0;
+    }
+
+    .antwoordknoppen button {
+      font-size: 5vw;
+      padding: 2vw 4vw;
+      border-radius: 10px;
+      border: none;
+      background-color: #fff5cc;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      min-width: 12vw;
+    }
+
+    .antwoordknoppen button:hover {
+      background-color: #ffe680;
+    }
+
+    #feedback {
+      margin-top: 3vw;
+      font-size: 5vw;
+      font-weight: bold;
+      text-align: center;
+      white-space: pre-line;
+    }
+
     .aantal-highlight {
       font-weight: bold;
       color: #c0392b;
-      font-size: 1.5em;
+      font-size: 6vw;
+    }
+
+    #volgendeKnop {
+      font-size: 4vw;
+      padding: 1.5vw 3vw;
+      margin-top: 4vw;
+      border-radius: 8px;
+      background-color: #ffffff;
+      border: 2px solid #f1c40f;
+      cursor: pointer;
+      display: none;
+    }
+
+    #volgendeKnop:hover {
+      background-color: #f9e79f;
+    }
+
+    #game {
+      display: none;
     }
   </style>
 </head>
 <body>
   <h1>🌋 Vulkaan Splitsen!</h1>
-  <div class="vulkaan-container">
-    <div class="vulkaan">🌋</div>
+
+  <div class="keuze-scherm" id="keuzeScherm">
+    <p style="font-size: 5vw;">Met hoeveel rotsen wil je oefenen?</p>
+    <button class="keuzeknop" onclick="startSpel(5)">1–5</button>
+    <button class="keuzeknop" onclick="startSpel(6)">1–6</button>
+    <button class="keuzeknop" onclick="startSpel(10)">1–10</button>
+    <button class="keuzeknop" onclick="startSpel(12)">1–12</button>
   </div>
+
   <div id="game">
+    <div class="vulkaan">🌋</div>
     <p id="vraag"></p>
-    <div class="rotsen" id="zichtbareRotsen"></div>
+    <div class="splitstabel">
+      <div class="splithelft" id="linkerKant"></div>
+      <div class="scheiding">|</div>
+      <div class="splithelft" id="rechterKant"></div>
+    </div>
     <div class="antwoordknoppen" id="knoppen"></div>
     <div id="feedback"></div>
-    <button onclick="nieuweVraag()">Volgende</button>
+    <button id="volgendeKnop">Volgende</button>
   </div>
 
   <script>
     let totaal = 0;
     let zichtbaar = 0;
+    let juisteAntwoord = 0;
+    let maxTotaal = 6;
+
+    function startSpel(max) {
+      maxTotaal = max;
+      document.getElementById('keuzeScherm').style.display = 'none';
+      document.getElementById('game').style.display = 'block';
+      nieuweVraag();
+    }
 
     function nieuweVraag() {
       document.getElementById('feedback').textContent = '';
-      totaal = Math.floor(Math.random() * 5) + 2; // 2 t/m 6
+      document.getElementById('volgendeKnop').style.display = 'none';
+
+      totaal = Math.floor(Math.random() * (maxTotaal - 1)) + 2;
       zichtbaar = Math.floor(Math.random() * (totaal - 1)) + 1;
+      juisteAntwoord = totaal - zichtbaar;
 
-      const vraagElement = document.getElementById('vraag');
-      vraagElement.innerHTML = `Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan. Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?`;
+      document.getElementById('vraag').innerHTML =
+        `Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan. Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?`;
 
-      toonZichtbareRotsen(zichtbaar);
-      maakKnoppen(totaal - zichtbaar);
+      toonSplitstabel(zichtbaar, null);
+      maakKnoppen();
     }
 
-    function toonZichtbareRotsen(aantal) {
-      const container = document.getElementById('zichtbareRotsen');
-      container.innerHTML = '';
-      for (let i = 0; i < aantal; i++) {
+    function toonSplitstabel(aantalLinks, aantalRechts, isFout = false) {
+      const links = document.getElementById('linkerKant');
+      const rechts = document.getElementById('rechterKant');
+      links.innerHTML = '';
+      rechts.innerHTML = '';
+
+      for (let i = 0; i < aantalLinks; i++) {
         const steen = document.createElement('span');
         steen.className = 'rots';
         steen.textContent = '🪨';
-        container.appendChild(steen);
+        links.appendChild(steen);
+      }
+
+      if (aantalRechts !== null) {
+        for (let i = 0; i < aantalRechts; i++) {
+          const steen = document.createElement('span');
+          steen.className = 'rots';
+          steen.textContent = '🪨';
+          if (isFout) steen.classList.add('fout');
+          rechts.appendChild(steen);
+        }
       }
     }
 
-    function maakKnoppen(juisteAntwoord) {
-      let container = document.getElementById('knoppen');
+    function maakKnoppen() {
+      const container = document.getElementById('knoppen');
       container.innerHTML = '';
-      for (let i = 1; i <= 5; i++) {
-        let knop = document.createElement('button');
+      for (let i = 1; i <= maxTotaal; i++) {
+        const knop = document.createElement('button');
         knop.textContent = i;
         knop.onclick = function () {
-          controleerAntwoord(i, juisteAntwoord);
+          controleerAntwoord(i);
         };
         container.appendChild(knop);
       }
     }
 
-    function controleerAntwoord(keuze, juist) {
+    function controleerAntwoord(keuze) {
       const feedback = document.getElementById('feedback');
-      if (keuze === juist) {
-        feedback.textContent = `Goed zo! ${zichtbaar} + ${juist} = ${totaal}`;
+      if (keuze === juisteAntwoord) {
+        feedback.innerHTML = `Goed zo!\n${zichtbaar} + ${juisteAntwoord} = ${totaal}`;
         feedback.style.color = 'green';
+        document.getElementById('volgendeKnop').style.display = 'inline-block';
+        toonSplitstabel(zichtbaar, juisteAntwoord, false);
       } else {
-        feedback.textContent = 'Oeps, probeer het nog eens!';
+        feedback.innerHTML = `Oeps, dat is niet juist.\nProbeer het nog eens.`;
         feedback.style.color = 'red';
+        toonSplitstabel(zichtbaar, keuze, true);
       }
     }
 
-    nieuweVraag();
+    document.getElementById('volgendeKnop').addEventListener('click', nieuweVraag);
   </script>
 </body>
 </html>
