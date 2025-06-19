@@ -57,6 +57,8 @@
     #vraag {
       font-size: clamp(16px, 3vw, 32px);
       margin: 1vh 0;
+      text-align: center;
+      line-height: 1.4;
     }
 
     .splitstabel {
@@ -129,6 +131,7 @@
       font-size: clamp(16px, 3vw, 32px);
       font-weight: bold;
       white-space: pre-line;
+      text-align: center;
     }
 
     .aantal-highlight {
@@ -158,10 +161,10 @@
   </style>
 </head>
 <body>
-  <h1>🌋 splitsvulkaan</h1>
+  <h1>splitsvulkaan</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
-    <p style="font-size: clamp(18px, 3.5vw, 36px);">Met hoeveel rotsen wil je oefenen?</p>
+    <p style="font-size: clamp(18px, 3.5vw, 36px); text-align: center;">Met hoeveel rotsen wil je oefenen?</p>
     <button class="keuzeknop" onclick="startSpel(5)">1–5</button>
     <button class="keuzeknop" onclick="startSpel(6)">1–6</button>
     <button class="keuzeknop" onclick="startSpel(10)">1–10</button>
@@ -203,7 +206,7 @@
       juisteAntwoord = totaal - zichtbaar;
 
       document.getElementById('vraag').innerHTML =
-        `Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan. Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?`;
+        `Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan.<br>Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?`;
 
       toonSplitstabel(zichtbaar, null);
       maakKnoppen();
