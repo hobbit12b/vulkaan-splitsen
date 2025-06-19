@@ -32,21 +32,7 @@
     .keuze-scherm, #game {
       width: 100%;
       max-width: 800px;
-    }
-
-    .keuzeknop {
-      font-size: clamp(18px, 4vw, 40px);
-      padding: 1vh 2vh;
-      margin: 1vh;
-      border: none;
-      border-radius: 10px;
-      background-color: #fff5cc;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-    }
-
-    .keuzeknop:hover {
-      background-color: #ffe680;
+      text-align: center;
     }
 
     .vulkaan {
@@ -55,6 +41,35 @@
       text-align: center;
       width: 100%;
       cursor: pointer;
+    }
+
+    .slider-label {
+      font-size: clamp(18px, 3.5vw, 36px);
+      margin: 2vh 0 1vh;
+    }
+
+    #slider {
+      width: 60%;
+    }
+
+    #sliderValue {
+      font-weight: bold;
+      font-size: clamp(18px, 3vw, 30px);
+    }
+
+    .startknop {
+      font-size: clamp(18px, 4vw, 36px);
+      padding: 1vh 3vh;
+      margin-top: 2vh;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff5cc;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .startknop:hover {
+      background-color: #ffe680;
     }
 
     #vraag {
@@ -166,14 +181,13 @@
   </style>
 </head>
 <body>
-  <h1>splitsvulkaan</h1>
+  <h1>🌋 splitsvulkaan</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
-    <p style="font-size: clamp(18px, 3.5vw, 36px); text-align: center;">Met hoeveel rotsen wil je oefenen?</p>
-    <button class="keuzeknop" onclick="startSpel(5)">1–5</button>
-    <button class="keuzeknop" onclick="startSpel(6)">1–6</button>
-    <button class="keuzeknop" onclick="startSpel(10)">1–10</button>
-    <button class="keuzeknop" onclick="startSpel(12)">1–12</button>
+    <div class="slider-label">Met hoeveel rotsen wil je oefenen?</div>
+    <input type="range" id="slider" min="1" max="12" value="6" oninput="updateSliderLabel()" />
+    <div>Gekozen aantal: <span id="sliderValue">6</span></div>
+    <button class="startknop" onclick="startSpel()">Start</button>
   </div>
 
   <div id="game">
@@ -189,7 +203,6 @@
     <button id="volgendeKnop">Volgende</button>
   </div>
 
-  <!-- Geluiden -->
   <audio id="goedGeluid" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="foutGeluid" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
@@ -202,8 +215,13 @@
     const goedGeluid = document.getElementById('goedGeluid');
     const foutGeluid = document.getElementById('foutGeluid');
 
-    function startSpel(max) {
-      maxTotaal = max;
+    function updateSliderLabel() {
+      const val = document.getElementById('slider').value;
+      document.getElementById('sliderValue').textContent = val;
+    }
+
+    function startSpel() {
+      maxTotaal = parseInt(document.getElementById('slider').value);
       document.getElementById('keuzeScherm').style.display = 'none';
       document.getElementById('game').style.display = 'block';
       nieuweVraag();
