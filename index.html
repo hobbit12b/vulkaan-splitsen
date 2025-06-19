@@ -16,6 +16,434 @@
     }
 
     h1 {
+      font-size: 6vw;
+      margin-bottom: 2vw;
+    }
+
+    .keuze-scherm, #game {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .keuzeknop {
+      font-size: 5vw;
+      padding: 2vw 4vw;
+      margin: 2vw;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff5cc;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .keuzeknop:hover {
+      background-color: #ffe680;
+    }
+
+    .vulkaan {
+      font-size: 12vw;
+      margin-bottom: 2vw;
+    }
+
+    .splitstabel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2vw;
+      margin: 3vw 0;
+    }
+
+    .splithelft {
+      flex: 1;
+      background-color: #fffbe6;
+      padding: 2vw;
+      border-radius: 10px;
+      min-height: 10vw;
+      min-width: 35%;
+    }
+
+    .scheiding {
+      font-size: 6vw;
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .rots {
+      font-size: 8vw;
+      margin: 0.5vw;
+      display: inline-block;
+    }
+
+    .rots.fout {
+      opacity: 0.5;
+      filter: hue-rotate(320deg) saturate(2);
+    }
+
+    .antwoordknoppen {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2vw;
+      margin: 2vw 0;
+    }
+
+    .antwoordknoppen button {
+      font-size: 5vw;
+      padding: 2vw 4vw;
+      border-radius: 10px;
+      border: none;
+      background-color: #fff5cc;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      min-width: 12vw;
+    }
+
+    .antwoordknoppen button:hover {
+      background-color: #ffe680;
+    }
+
+    #feedback {
+      margin-top: 3vw;
+      font-size: 5vw;
+      font-weight: bold;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .aantal-highlight {
+      font-weight: bold;
+      color: #c0392b;
+      font-size: 6vw;
+    }
+
+    #volgendeKnop {
+      font-size: 4vw;
+      padding: 1.5vw 3vw;
+      margin-top: 4vw;
+      border-radius: 8px;
+      background-color: #ffffff;
+      border: 2px solid #f1c40f;
+      cursor: pointer;
+      display: none;
+    }
+
+    #volgendeKnop:hover {
+      background-color: #f9e79f;
+    }
+
+    #game {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Splitsvulkaan</h1>
+
+  <div class="keuze-scherm" id="keuzeScherm">
+    <p style="font-size: 5vw;">Met hoeveel rotsen wil je oefenen?</p>
+    <button class="keuzeknop" onclick="startSpel(5)">1–5</button>
+    <button class="keuzeknop" onclick="startSpel(6)">1–6</button>
+    <button class="keuzeknop" onclick="startSpel(10)">1–10</button>
+    <button class="keuzeknop" onclick="startSpel(12)">1–12</button>
+  </div>
+
+  <div id="game">
+    <div class="vulkaan">🌋</div>
+    <p id="vraag"></p>
+    <div class="splitstabel">
+      <div class="splithelft" id="linkerKant"></div>
+      <div class="scheiding">|</div>
+      <div class="splithelft" id="rechterKant"></div>
+    </div>
+    <div class="antwoordknoppen" id="knoppen"></div>
+    <div id="feedback"></div>
+    <button id="volgendeKnop">Volgende</button>
+  </div>
+
+  <script>
+    let totaal = 0;
+    let zichtbaar = 0;
+    let juisteAntwoord = 0;
+    let maxTotaal = 6;
+
+    function startSpel(max) {
+      maxTotaal = max;
+      document.getElementById('keuzeScherm').style.display = 'none';
+      document.getElementById('game').style.display = 'block';
+      nieuweVraag();
+    }
+
+    function nieuweVraag() {
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('volgendeKnop').style.display = 'none';
+
+      totaal = Math.floor(Math.random() * (maxTotaal - 1)) + 2;
+      zichtbaar = Math.floor(Math.random() * (totaal - 1)) + 1;
+      juisteAntwoord = totaal - zichtbaar;
+
+      document.getElementById('vraag').innerHTML =
+        Er kwamen <span class="aantal-highlight">${totaal}</span> rotsen uit de vulkaan. Je ziet er ${zichtbaar}. Hoeveel zijn er aan de andere kant?;
+
+      toonSplitstabel(zichtbaar, null);
+      maakKnoppen();
+    }
+
+    function toonSplitstabel(aantalLinks, aantalRechts, isFout = false) {
+      const links = document.getElementById('linkerKant');
+      const rechts = document.getElementById('rechterKant');
+      links.innerHTML = '';
+      rechts.innerHTML = '';
+
+      for (let i = 0; i < aantalLinks; i++) {
+        const steen = document.createElement('span');
+        steen.className = 'rots';
+        steen.textContent = '🪨';
+        links.appendChild(steen);
+      }
+
+      if (aantalRechts !== null) {
+        for (let i = 0; i < aantalRechts; i++) {
+          const steen = document.createElement('span');
+          steen.className = 'rots';
+          steen.textContent = '🪨';
+          if (isFout) steen.classList.add('fout');
+          rechts.appendChild(steen);
+        }
+      }
+    }
+
+    function maakKnoppen() {
+      const container = document.getElementById('knoppen');
+      container.innerHTML = '';
+      for (let i = 1; i <= maxTotaal; i++) {
+        const knop = document.createElement('button');
+        knop.textContent = i;
+        knop.onclick = function () {
+          controleerAntwoord(i);
+        };
+        container.appendChild(knop);
+      }
+    }
+
+    function controleerAntwoord(keuze) {
+      const feedback = document.getElementById('feedback');
+      if (keuze === juisteAntwoord) {
+        feedback.innerHTML = Goed zo!\n${zichtbaar} + ${juisteAntwoord} = ${totaal};
+        feedback.style.color = 'green';
+        document.getElementById('volgendeKnop').style.display = 'inline-block';
+        toonSplitstabel(zichtbaar, juisteAntwoord, false);
+      } else {
+        feedback.innerHTML = Oeps, dat is niet juist.\nProbeer het nog eens.;
+        feedback.style.color = 'red';
+        toonSplitstabel(zichtbaar, keuze, true);
+      }
+    }
+
+    document.getElementById('volgendeKnop').addEventListener('click', nieuweVraag);
+  </script>
+</body>
+</html>
+
+Ik krijg echter niet het hele spel op mijn scherm. Kun je maken dat het spel helemaal op mijn scherm past
+ChatGPT zei:
+Dank je voor het delen van de code en de screenshot. Het probleem dat je beschrijft – dat het spel niet volledig op het scherm past – komt waarschijnlijk doordat de lettertypes en knoppen erg groot zijn ingesteld met vw (viewport width). Dat werkt goed op grote schermen, maar op kleinere schermen (zoals laptops of tablets) kunnen de elementen daardoor te groot worden en buiten beeld vallen.
+
+✅ Oplossing: Verklein lettertypes en knoppen op basis van schermgrootte
+Ik geef je hieronder een verbeterde versie van je CSS met media queries. Hiermee wordt de schaal van tekst en knoppen automatisch aangepast op kleinere schermen:
+
+🔧 Voeg deze verbeterde CSS toe (vervang je bestaande <style> tag):
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #f8b500, #fceabb);
+    padding: 2vw;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 5vw;
+    margin-bottom: 2vw;
+  }
+
+  .keuze-scherm, #game {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .keuzeknop {
+    font-size: 4vw;
+    padding: 1.5vw 3vw;
+    margin: 1.5vw;
+    border: none;
+    border-radius: 10px;
+    background-color: #fff5cc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .keuzeknop:hover {
+    background-color: #ffe680;
+  }
+
+  .vulkaan {
+    font-size: 10vw;
+    margin-bottom: 2vw;
+  }
+
+  .splitstabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    flex-wrap: wrap;
+    margin: 2vw 0;
+  }
+
+  .splithelft {
+    flex: 1;
+    background-color: #fffbe6;
+    padding: 1.5vw;
+    border-radius: 10px;
+    min-height: 8vw;
+    min-width: 30%;
+  }
+
+  .scheiding {
+    font-size: 5vw;
+    color: #c0392b;
+    font-weight: bold;
+  }
+
+  .rots {
+    font-size: 6vw;
+    margin: 0.5vw;
+    display: inline-block;
+  }
+
+  .rots.fout {
+    opacity: 0.5;
+    filter: hue-rotate(320deg) saturate(2);
+  }
+
+  .antwoordknoppen {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2vw;
+    margin: 2vw 0;
+  }
+
+  .antwoordknoppen button {
+    font-size: 4vw;
+    padding: 1.5vw 3vw;
+    border-radius: 10px;
+    border: none;
+    background-color: #fff5cc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    min-width: 10vw;
+  }
+
+  .antwoordknoppen button:hover {
+    background-color: #ffe680;
+  }
+
+  #feedback {
+    margin-top: 3vw;
+    font-size: 4vw;
+    font-weight: bold;
+    text-align: center;
+    white-space: pre-line;
+  }
+
+  .aantal-highlight {
+    font-weight: bold;
+    color: #c0392b;
+    font-size: 5vw;
+  }
+
+  #volgendeKnop {
+    font-size: 3.5vw;
+    padding: 1.5vw 3vw;
+    margin-top: 3vw;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 2px solid #f1c40f;
+    cursor: pointer;
+    display: none;
+  }
+
+  #volgendeKnop:hover {
+    background-color: #f9e79f;
+  }
+
+  #game {
+    display: none;
+  }
+
+  /* Media query voor kleinere schermen (zoals tablets of kleine laptops) */
+  @media (max-width: 768px) {
+    h1, .keuzeknop, .antwoordknoppen button, #feedback, .aantal-highlight, #volgendeKnop {
+      font-size: 5vw;
+    }
+
+    .rots {
+      font-size: 8vw;
+    }
+
+    .splithelft {
+      min-height: 10vw;
+    }
+  }
+
+  /* Media query voor telefoons */
+  @media (max-width: 480px) {
+    h1, .keuzeknop, .antwoordknoppen button, #feedback, .aantal-highlight, #volgendeKnop {
+      font-size: 6vw;
+    }
+
+    .rots {
+      font-size: 9vw;
+    }
+  }
+</style>
+✅ Wat doet deze aanpassing?
+Verkleint standaard lettertypes en knoppen iets (beter leesbaar, minder ruimtegebruik).
+
+Past lettergroottes automatisch aan via media queries voor kleine schermen.
+
+Zorgt dat alles in beeld past, ongeacht apparaatgrootte.
+
+Laat me weten als je ook een fullscreen-modus of zoom-reset bij opstarten wilt toevoegen voor gebruik op digiborden!
+
+Je zei:
+kun je het in een html zetten die ik kan kopieren en plakken in github
+ChatGPT zei:
+Zeker! Hieronder staat een complete en verbeterde HTML-versie van jouw spel met responsieve styling, zodat het spel wél volledig op het scherm past – op laptops, tablets én telefoons.
+
+Je kunt dit direct kopiëren en plakken in GitHub (bijvoorbeeld in een bestand index.html):
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vulkaan Splitsen - Keuze</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #f8b500, #fceabb);
+      padding: 2vw;
+      margin: 0;
+    }
+
+    h1 {
       font-size: 5vw;
       margin-bottom: 2vw;
     }
@@ -162,7 +590,7 @@
   </style>
 </head>
 <body>
-  <h1>Splitsvulkaan</h1>
+  <h1>🌋 Vulkaan Splitsen!</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
     <p style="font-size: 5vw;">Met hoeveel rotsen wil je oefenen?</p>
