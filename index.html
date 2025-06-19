@@ -54,6 +54,7 @@
       margin-bottom: 1vh;
       text-align: center;
       width: 100%;
+      cursor: pointer;
     }
 
     #vraag {
@@ -165,7 +166,7 @@
   </style>
 </head>
 <body>
-  <h1>🌋 splitsvulkaan</h1>
+  <h1>splitsvulkaan</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
     <p style="font-size: clamp(18px, 3.5vw, 36px); text-align: center;">Met hoeveel rotsen wil je oefenen?</p>
@@ -176,7 +177,7 @@
   </div>
 
   <div id="game">
-    <div class="vulkaan">🌋</div>
+    <div class="vulkaan" onclick="terugNaarMenu()">🌋</div>
     <p id="vraag"></p>
     <div class="splitstabel">
       <div class="splithelft" id="linkerKant"></div>
@@ -188,9 +189,9 @@
     <button id="volgendeKnop">Volgende</button>
   </div>
 
-  <!-- Geluidsfragmenten (Base64 ingesloten) -->
-  <audio id="goedGeluid" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCA..."></audio>
-  <audio id="foutGeluid" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCA..."></audio>
+  <!-- Geluiden -->
+  <audio id="goedGeluid" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="foutGeluid" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
   <script>
     let totaal = 0;
@@ -206,6 +207,11 @@
       document.getElementById('keuzeScherm').style.display = 'none';
       document.getElementById('game').style.display = 'block';
       nieuweVraag();
+    }
+
+    function terugNaarMenu() {
+      document.getElementById('game').style.display = 'none';
+      document.getElementById('keuzeScherm').style.display = 'block';
     }
 
     function nieuweVraag() {
