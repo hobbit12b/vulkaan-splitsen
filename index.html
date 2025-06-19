@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>splitsvulkaan</title>
+  <title>Splitsvulkaan</title>
   <style>
     * { box-sizing: border-box; }
 
@@ -13,6 +13,7 @@
       background: linear-gradient(to bottom, #f8b500, #fceabb);
       padding: 2vw;
       margin: 0;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -48,7 +49,7 @@
     .splitstabel {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: stretch;
       gap: 2vw;
       flex-wrap: wrap;
       margin: 2vw 0;
@@ -57,34 +58,30 @@
     .splithelft {
       flex: 1;
       background-color: #fffbe6;
-      padding: 1.5vw;
+      padding: 1vw;
       border-radius: 10px;
-      min-height: 6vw;
       min-width: 30%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
     }
 
     .scheiding {
       font-size: 5vw;
       color: #c0392b;
       font-weight: bold;
+      align-self: center;
     }
 
     .rots {
-      display: inline-block;
-      margin: 0.3vw;
+      margin: 0.2vw;
+      line-height: 1;
     }
 
-    .rots.klein {
-      font-size: 4vw;
-    }
-
-    .rots.normaal {
-      font-size: 6vw;
-    }
-
-    .rots.groot {
-      font-size: 8vw;
-    }
+    .rots.klein { font-size: 4vw; }
+    .rots.normaal { font-size: 6vw; }
+    .rots.groot { font-size: 8vw; }
 
     .rots.fout {
       opacity: 0.5;
