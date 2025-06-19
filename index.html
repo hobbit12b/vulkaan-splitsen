@@ -52,6 +52,8 @@
     .vulkaan {
       font-size: 8vh;
       margin-bottom: 1vh;
+      text-align: center;
+      width: 100%;
     }
 
     #vraag {
@@ -149,6 +151,8 @@
       border: 2px solid #f1c40f;
       cursor: pointer;
       display: none;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #volgendeKnop:hover {
@@ -161,7 +165,7 @@
   </style>
 </head>
 <body>
-  <h1>splitsvulkaan</h1>
+  <h1>🌋 splitsvulkaan</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
     <p style="font-size: clamp(18px, 3.5vw, 36px); text-align: center;">Met hoeveel rotsen wil je oefenen?</p>
@@ -184,11 +188,18 @@
     <button id="volgendeKnop">Volgende</button>
   </div>
 
+  <!-- Geluidsfragmenten (Base64 ingesloten) -->
+  <audio id="goedGeluid" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCA..."></audio>
+  <audio id="foutGeluid" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCA..."></audio>
+
   <script>
     let totaal = 0;
     let zichtbaar = 0;
     let juisteAntwoord = 0;
     let maxTotaal = 6;
+
+    const goedGeluid = document.getElementById('goedGeluid');
+    const foutGeluid = document.getElementById('foutGeluid');
 
     function startSpel(max) {
       maxTotaal = max;
@@ -262,11 +273,13 @@
       if (keuze === juisteAntwoord) {
         feedback.innerHTML = `Goed zo!\n${zichtbaar} + ${juisteAntwoord} = ${totaal}`;
         feedback.style.color = 'green';
+        goedGeluid.play();
         document.getElementById('volgendeKnop').style.display = 'inline-block';
         toonSplitstabel(zichtbaar, juisteAntwoord, false);
       } else {
         feedback.innerHTML = `Oeps, dat is niet juist.\nProbeer het nog eens.`;
         feedback.style.color = 'red';
+        foutGeluid.play();
         toonSplitstabel(zichtbaar, keuze, true);
       }
     }
