@@ -7,29 +7,37 @@
   <style>
     * { box-sizing: border-box; }
 
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background: linear-gradient(to bottom, #f8b500, #fceabb);
-      padding: 2vw;
+    html, body {
+      height: 100%;
       margin: 0;
-      overflow-x: hidden;
+      padding: 0;
+      font-family: sans-serif;
+      background: linear-gradient(to bottom, #f8b500, #fceabb);
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2vh;
     }
 
     h1 {
-      font-size: 5vw;
-      margin-bottom: 2vw;
+      font-size: clamp(24px, 5vw, 50px);
+      margin: 1vh 0;
     }
 
     .keuze-scherm, #game {
+      width: 100%;
       max-width: 800px;
-      margin: 0 auto;
     }
 
     .keuzeknop {
-      font-size: 4vw;
-      padding: 1.5vw 3vw;
-      margin: 1.5vw;
+      font-size: clamp(18px, 4vw, 40px);
+      padding: 1vh 2vh;
+      margin: 1vh;
       border: none;
       border-radius: 10px;
       background-color: #fff5cc;
@@ -42,46 +50,51 @@
     }
 
     .vulkaan {
-      font-size: 10vw;
-      margin-bottom: 2vw;
+      font-size: 8vh;
+      margin-bottom: 1vh;
+    }
+
+    #vraag {
+      font-size: clamp(16px, 3vw, 32px);
+      margin: 1vh 0;
     }
 
     .splitstabel {
       display: flex;
       justify-content: center;
-      align-items: stretch;
+      align-items: center;
       gap: 2vw;
-      flex-wrap: wrap;
-      margin: 2vw 0;
+      margin: 1vh 0;
     }
 
     .splithelft {
       flex: 1;
       background-color: #fffbe6;
-      padding: 1vw;
+      padding: 1vh;
       border-radius: 10px;
       min-width: 30%;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
+      min-height: 10vh;
     }
 
     .scheiding {
-      font-size: 5vw;
+      font-size: 4vw;
       color: #c0392b;
       font-weight: bold;
       align-self: center;
     }
 
     .rots {
-      margin: 0.2vw;
       line-height: 1;
+      margin: 0.2vw;
     }
 
     .rots.klein { font-size: 4vw; }
-    .rots.normaal { font-size: 6vw; }
-    .rots.groot { font-size: 8vw; }
+    .rots.normaal { font-size: 5vw; }
+    .rots.groot { font-size: 6vw; }
 
     .rots.fout {
       opacity: 0.5;
@@ -93,12 +106,12 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 2vw;
-      margin: 2vw 0;
+      margin: 1vh 0;
     }
 
     .antwoordknoppen button {
-      font-size: 4vw;
-      padding: 1.5vw 3vw;
+      font-size: clamp(16px, 3.5vw, 36px);
+      padding: 1vh 2vh;
       border-radius: 10px;
       border: none;
       background-color: #fff5cc;
@@ -112,23 +125,22 @@
     }
 
     #feedback {
-      margin-top: 3vw;
-      font-size: 4vw;
+      margin-top: 1vh;
+      font-size: clamp(16px, 3vw, 32px);
       font-weight: bold;
-      text-align: center;
       white-space: pre-line;
     }
 
     .aantal-highlight {
       font-weight: bold;
       color: #c0392b;
-      font-size: 5vw;
+      font-size: 1.2em;
     }
 
     #volgendeKnop {
-      font-size: 3.5vw;
-      padding: 1.5vw 3vw;
-      margin-top: 3vw;
+      font-size: clamp(16px, 3vw, 30px);
+      padding: 1vh 2vh;
+      margin-top: 1.5vh;
       border-radius: 8px;
       background-color: #ffffff;
       border: 2px solid #f1c40f;
@@ -143,33 +155,13 @@
     #game {
       display: none;
     }
-
-    @media (max-width: 768px) {
-      h1, .keuzeknop, .antwoordknoppen button, #feedback, .aantal-highlight, #volgendeKnop {
-        font-size: 5vw;
-      }
-
-      .rots.klein { font-size: 5vw; }
-      .rots.normaal { font-size: 6.5vw; }
-      .rots.groot { font-size: 8vw; }
-    }
-
-    @media (max-width: 480px) {
-      h1, .keuzeknop, .antwoordknoppen button, #feedback, .aantal-highlight, #volgendeKnop {
-        font-size: 6vw;
-      }
-
-      .rots.klein { font-size: 6vw; }
-      .rots.normaal { font-size: 7vw; }
-      .rots.groot { font-size: 9vw; }
-    }
   </style>
 </head>
 <body>
-  <h1>splitsvulkaan</h1>
+  <h1>🌋 splitsvulkaan</h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
-    <p style="font-size: 5vw;">Met hoeveel rotsen wil je oefenen?</p>
+    <p style="font-size: clamp(18px, 3.5vw, 36px);">Met hoeveel rotsen wil je oefenen?</p>
     <button class="keuzeknop" onclick="startSpel(5)">1–5</button>
     <button class="keuzeknop" onclick="startSpel(6)">1–6</button>
     <button class="keuzeknop" onclick="startSpel(10)">1–10</button>
