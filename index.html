@@ -13,7 +13,7 @@
       padding: 0;
       font-family: sans-serif;
       background: linear-gradient(to bottom, #f8b500, #fceabb);
-      overflow: auto; /* scroll mogelijk als nodig */
+      overflow: auto;
     }
 
     body {
@@ -129,8 +129,11 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2vw;
+      gap: 1vw 2vw;
       margin: 1vh 0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .antwoordknoppen button {
@@ -141,7 +144,8 @@
       background-color: #fff5cc;
       box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
       cursor: pointer;
-      min-width: 10vw;
+      flex: 1 1 calc(16% - 1vw);
+      max-width: 80px;
     }
 
     .antwoordknoppen button:hover {
