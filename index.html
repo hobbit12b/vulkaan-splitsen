@@ -13,7 +13,7 @@
       padding: 0;
       font-family: sans-serif;
       background: linear-gradient(to bottom, #f8b500, #fceabb);
-      overflow: hidden;
+      overflow: auto; /* scroll mogelijk als nodig */
     }
 
     body {
@@ -27,6 +27,10 @@
     h1 {
       font-size: clamp(24px, 5vw, 50px);
       margin: 1vh 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5vw;
     }
 
     .keuze-scherm, #game {
@@ -192,7 +196,7 @@
   </style>
 </head>
 <body>
-  <h1>splitsvulkaan</h1>
+  <h1 onclick="toggleFullscreen()">splitsvulkaan <span style="font-size: 0.9em;">⛶</span></h1>
 
   <div class="keuze-scherm" id="keuzeScherm">
     <div class="slider-label">Met hoeveel rotsen wil je oefenen?</div>
@@ -234,6 +238,7 @@
 
     function startSpel() {
       maxTotaal = parseInt(document.getElementById('slider').value);
+      activeerFullscreen();
       document.getElementById('keuzeScherm').style.display = 'none';
       document.getElementById('game').style.display = 'block';
       nieuweVraag();
@@ -306,7 +311,7 @@
 
     function controleerAntwoord(keuze) {
       const feedback = document.getElementById('feedback');
-      feedback.innerHTML = ''; // reset
+      feedback.innerHTML = '';
 
       if (keuze === juisteAntwoord) {
         feedback.innerHTML = `<div class="emoji-feedback">🥳</div>${zichtbaar} + ${juisteAntwoord} = ${totaal}`;
@@ -319,6 +324,25 @@
         feedback.style.color = 'red';
         foutGeluid.play();
         toonSplitstabel(zichtbaar, keuze, true);
+      }
+    }
+
+    function activeerFullscreen() {
+      const docEl = document.documentElement;
+      if (!document.fullscreenElement && docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen mislukt: ${err.message}`);
+        });
+      }
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen activeren mislukt: ${err.message}`);
+        });
       }
     }
 
